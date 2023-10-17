@@ -1,5 +1,6 @@
 from .user import User
+from .store import Store
 
 models = [
-    User,
+    User,Store,
 ]
