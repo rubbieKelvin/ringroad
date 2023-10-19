@@ -1,23 +1,21 @@
-"""
-URL configuration for core project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path, include
+from shared.tooling.postman import PostmanV2Collection
+
+collection = PostmanV2Collection(
+    url="http://localhost:8000",
+    info=PostmanV2Collection.Info(
+        name="Inventory Manager API",
+        description="The Inventory Manager API is a powerful tool for efficiently managing your inventory."
+        "\nIt offers a set of endpoints and functions that enable you to easily control and monitor your inventory of products or items."
+        "\nWith features for creating, updating, and tracking items, as well as managing purchases, sales, and inventory adjustments,"
+        "\nthis API empowers businesses to streamline their inventory management processes, reduce errors,"
+        "\nand maintain accurate and up-to-date inventory records",
+    ),
+)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/', include("api.urls"))
+    path("admin/", admin.site.urls),
+    path("api/", include("api.urls")),
+    path("postman-v2-collection/", collection.view),
 ]
