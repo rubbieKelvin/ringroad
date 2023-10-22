@@ -11,6 +11,7 @@ django-rest-knox = "*"
 
 [dev-packages]
 pipenv = "*"
+black = "*"
 
 [requires]
 python_version = "3.11"
