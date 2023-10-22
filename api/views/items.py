@@ -1,15 +1,19 @@
+import pydantic
+
+from uuid import UUID
+from decimal import Decimal
+
 from rest_framework.request import Request
 from rest_framework.response import Response
-from shared.view_tools import body_tools
-from shared.view_tools.paths import Api
-from uuid import UUID
-from shared.view_tools.exceptions import ApiException
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-from decimal import Decimal
+
+from shared.view_tools import body_tools
+from shared.view_tools.paths import Api
+from shared.view_tools.exceptions import ApiException
+
 from api.models.item import Item
-from api.sr import ItemSerializer
-import pydantic
+
 
 item_api = Api("item/", name="Items")
 
@@ -22,6 +26,11 @@ class CreateItemInput(pydantic.BaseModel):
     selling_price: Decimal
     quantity: int
 
+
+def create_item(request: Request) -> Response:
+    return Response()
+
+
 class UpdateItemInput(pydantic.BaseModel):
     name: str | None
     brand: str | None
@@ -29,10 +38,6 @@ class UpdateItemInput(pydantic.BaseModel):
     purchase_price: Decimal | None
     selling_price: Decimal | None
     quantity: int | None
-
-
-def create_item(request: Request) -> Response:
-    return Response()
 
 
 @item_api.endpoint_class("<item_id>", permission=IsAuthenticated)
@@ -43,21 +48,33 @@ class ItemCreateUpdateDelete:
         except ValueError:
             raise ApiException("Invalid item_id string")
         return item_id
-    
+
     def get(self, request: Request, item_id: str) -> Response:
-        item_id= self.check_item_id(item_id=item_id)
+        item_id = self.check_item_id(item_id=item_id)
         item = Item.objects.get(id=item_id)
-        sr = ItemSerializer(item, request)
-        return Response(sr())
-    
+        return Response(item.serialize())
+
     @body_tools.validate(UpdateItemInput)
     def update(self, request: Request, item_id: str) -> Response:
         data: UpdateItemInput = body_tools.get_validated_body(request=request)
 
         item = Item.objects.get(id=item_id)
-        if (not data.name and not data.brand and not data.category and not data.purchase_price and not data.selling_price and not data.quantity):
-            raise ApiException("Provide atlest one parameter to be update")
-        
+
+        if not all(
+            [
+                getattr(data, i)
+                for i in [
+                    "name",
+                    "brand",
+                    "category",
+                    "purchase_price",
+                    "selling_price",
+                    "quantity",
+                ]
+            ]
+        ):
+            raise ApiException("Provide at least one parameter to be update")
+
         if data.name:
             item.name = data.name
         if data.brand:
@@ -74,5 +91,4 @@ class ItemCreateUpdateDelete:
         return Response()
 
     def delete(self, request: Request, item_id: str) -> Response:
-
         return Response()

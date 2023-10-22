@@ -1,23 +1,27 @@
-from rest_framework.request import Request
-from rest_framework.response import Response
-from shared.view_tools import body_tools
-from shared.view_tools.paths import Api
-from api.models.store import Store
-from api.models.user import User
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status,serializers
-from shared.view_tools import exceptions
-
 import typing
 import pydantic
 
+from api.models.store import Store
+from api.models.user import User
+
+from rest_framework.request import Request
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status, serializers
+
+from shared.view_tools import exceptions
+from shared.view_tools import body_tools
+from shared.view_tools.paths import Api
+
+
 store_api = Api("store/", name="Store")
+
 
 # TODO: review
 class UpdateStoreSerializer(serializers.ModelSerializer):
     class Meta:
-        model= Store
-        fields = ['name','description']
+        model = Store
+        fields = ["name", "description"]
 
 
 class CreateStoreInput(pydantic.BaseModel):
@@ -38,16 +42,16 @@ def create_store(request: Request) -> Response:
     return Response(status=status.HTTP_201_CREATED)
 
 
-@store_api.endpoint("update-store/<id>",method="PATCH",permission=IsAuthenticated)
+@store_api.endpoint("update-store/<id>", method="PATCH", permission=IsAuthenticated)
 @body_tools.validate(CreateStoreInput)
-def update_store(request:Request,id:str) -> Response:
+def update_store(request: Request, id: str) -> Response:
     data: CreateStoreInput = body_tools.get_validated_body(request=request)
-    user: User = typing.cast(request.user,User)
+    user: User = typing.cast(request.user, User)
 
     try:
         store = Store.objects.get(id=id)
         if store:
-            store_update_data = UpdateStoreSerializer(instance=user,data=request.data, partial=True) # type: ignore
+            store_update_data = UpdateStoreSerializer(instance=user, data=request.data, partial=True)  # type: ignore
             if store_update_data.is_valid():
                 store_update_data.save()
                 return Response(status=status.HTTP_201_CREATED)

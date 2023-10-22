@@ -3,7 +3,7 @@ from django.urls import path, include
 from shared.tooling.postman import PostmanV2Collection
 
 collection = PostmanV2Collection(
-    url="http://localhost:8000",
+    url="http://localhost:8000/api",
     info=PostmanV2Collection.Info(
         name="Inventory Manager API",
         description="The Inventory Manager API is a powerful tool for efficiently managing your inventory."
