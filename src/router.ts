@@ -9,22 +9,22 @@ export const router = createRouter({
       component: () => import("@/views/index.vue"),
     },
     {
-      path: "accounts/signup",
+      path: "/accounts/signup",
       name: "signup",
       component: () => import("@/views/authenticate.vue"),
     },
     {
-      path: "accounts/signin",
-      name: "login",
+      path: "/accounts/signin",
+      name: "signin",
       component: () => import("@/views/authenticate.vue"),
     },
     {
-      path: "store/create",
+      path: "/store/create",
       name: "create-store",
       component: () => import("@/views/create-store.vue"),
     },
     {
-      path: "store/select",
+      path: "/store/select",
       name: "select-store",
       component: () => import("@/views/select-store.vue"),
     },
