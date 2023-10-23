@@ -1,5 +1,5 @@
 from django.db import models
-from shared.abstractmodel import AbstractModel
+from shared.abstractmodel import AbstractModel, serialization
 
 
 class Item(AbstractModel):

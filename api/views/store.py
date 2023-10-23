@@ -51,6 +51,7 @@ def update_store(request: Request, id: str) -> Response:
     try:
         store = Store.objects.get(id=id)
         if store:
+            # TODO: review
             store_update_data = UpdateStoreSerializer(instance=user, data=request.data, partial=True)  # type: ignore
             if store_update_data.is_valid():
                 store_update_data.save()
