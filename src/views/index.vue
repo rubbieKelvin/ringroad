@@ -4,8 +4,12 @@
       <h1 class="font-medium text-2xl">Inventory manager</h1>
       <p>Manage your store's inventory</p>
       <div class="flex gap-2">
-        <RouterLink :to="{name: 'signup'}" class="btn bg-blue-600 text-white">Sign Up</RouterLink>
-        <RouterLink :to="{name: 'signin'}" class="btn border border-gray-300">Sign In</RouterLink>
+        <RouterLink :to="{ name: 'signup' }" class="btn bg-gray-500 text-white"
+          >Sign Up</RouterLink
+        >
+        <RouterLink :to="{ name: 'signin' }" class="btn border border-gray-300">
+          Sign In
+        </RouterLink>
       </div>
     </div>
   </div>
