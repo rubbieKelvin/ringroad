@@ -29,6 +29,6 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 
 function goToStoreSelect() {
-  router.push({ name: "select-store" });
+  router.push({ name: "create-store" });
 }
 </script>

@@ -28,5 +28,16 @@ export const router = createRouter({
       name: "select-store",
       component: () => import("@/views/select-store.vue"),
     },
+    {
+      path: "/store/:id",
+      component: () => import("@/views/dashboard/layout.vue"),
+      children: [
+        {
+          path: "/",
+          name: "dashboard-home",
+          component: () => import("@/views/dashboard/index.vue"),
+        },
+      ],
+    },
   ],
 });
