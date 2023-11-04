@@ -30,4 +30,19 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useRoute } from "vue-router";
+import { BACKEND_SIGNUP_AUTH } from "@/constants";
+import { onMounted } from "vue";
+
+const route = useRoute();
+const { code, user } = route.query;
+
+onMounted(() => {
+  if (!(code && user)) {
+    const url = new URL(BACKEND_SIGNUP_AUTH);
+    url.searchParams.set("flash", "Error, could'nt derive user, Try signing in");
+    window.open(url, '_self');
+  }
+});
+</script>

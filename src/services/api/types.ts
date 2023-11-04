@@ -1,11 +1,3 @@
-interface JsonBodyHeader {
-  "Content-Type": string;
-}
-
-interface AuthenticationHeader {
-  Authorization: string;
-}
-
 export interface EndpointInterface {
   "[PO] /api/auth/signup": {
     data: {
@@ -14,8 +6,15 @@ export interface EndpointInterface {
       email: string;
       password: string;
     };
-    header: JsonBodyHeader & AuthenticationHeader;
     response: {};
+    path_args?: {};
+  };
+  "[PO] /api/user/me": {
+    data: {};
+    response: {
+      id: string;
+      email: string;
+    };
     path_args?: {};
   };
 }
