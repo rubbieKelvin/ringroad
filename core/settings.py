@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'knox',
+    'shared.apps.authentication'
 ]
 
 MIDDLEWARE = [

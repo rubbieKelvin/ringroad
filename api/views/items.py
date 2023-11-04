@@ -31,17 +31,8 @@ def create_item(request: Request) -> Response:
     return Response()
 
 
-class UpdateItemInput(pydantic.BaseModel):
-    name: str | None
-    brand: str | None
-    category: str | None
-    purchase_price: Decimal | None
-    selling_price: Decimal | None
-    quantity: int | None
-
-
 @item_api.endpoint_class("<item_id>", permission=IsAuthenticated)
-class ItemCreateUpdateDelete:
+class ItemGetUpdateDelete:
     def check_item_id(self, item_id: str) -> str:
         try:
             UUID(item_id)
@@ -54,9 +45,18 @@ class ItemCreateUpdateDelete:
         item = Item.objects.get(id=item_id)
         return Response(item.serialize())
 
+    class UpdateItemInput(pydantic.BaseModel):
+        name: str | None
+        brand: str | None
+        category: str | None
+        purchase_price: Decimal | None
+        selling_price: Decimal | None
+        quantity: int | None
+
+
     @body_tools.validate(UpdateItemInput)
     def update(self, request: Request, item_id: str) -> Response:
-        data: UpdateItemInput = body_tools.get_validated_body(request=request)
+        data: ItemGetUpdateDelete.UpdateItemInput = body_tools.get_validated_body(request=request)
 
         item = Item.objects.get(id=item_id)
 

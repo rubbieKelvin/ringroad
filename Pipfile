@@ -6,11 +6,13 @@ name = "pypi"
 [packages]
 django = "*"
 djangorestframework = "*"
-pydantic = {extras = ["email"], version = "*"}
 django-rest-knox = "*"
+pydantic = {extras = ["email"], version = "*"}
+furl = "*"
 
 [dev-packages]
 ipython = "*"
+pytest = "*"
 black = "*"
 
 [requires]

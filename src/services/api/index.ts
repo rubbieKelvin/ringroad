@@ -1,6 +1,8 @@
 import axios from "axios";
 import { EndpointInterface } from "./types";
 
+const API_URL = import.meta.env.VITE_BACKEND_BASE_URL;
+
 const method_map: Record<string, string> = {
   "[PO]": "post",
   "[GE]": "get",
@@ -37,7 +39,7 @@ export const useApi = async <T extends keyof EndpointInterface>(
   const headers = options.headers as any;
 
   return await axios.request<EndpointInterface[T]["response"]>({
-    url,
+    url: API_URL + url,
     method,
     headers: { ...headers },
     data: options.data,
