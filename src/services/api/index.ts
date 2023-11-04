@@ -1,5 +1,6 @@
 import axios from "axios";
 import { EndpointInterface } from "./types";
+import { BACKEND_BASE_URL } from "@/constants";
 
 const method_map: Record<string, string> = {
   "[PO]": "post",
@@ -23,8 +24,8 @@ export const useApi = async <T extends keyof EndpointInterface>(
   endpoint: T,
   options: {
     data: EndpointInterface[T]["data"];
-    headers: EndpointInterface[T]["header"];
     path_args: EndpointInterface[T]["path_args"];
+    authenticated?: boolean;
   }
 ) => {
   const [short_method, template_url] = endpoint.split(" ");
@@ -34,12 +35,19 @@ export const useApi = async <T extends keyof EndpointInterface>(
     ? use_template(template_url, options.path_args)
     : template_url;
 
-  const headers = options.headers as any;
+  let token: string | null = null;
+
+  if (options.authenticated) {
+    token = localStorage.getItem("authtoken");
+  }
 
   return await axios.request<EndpointInterface[T]["response"]>({
-    url,
+    url: BACKEND_BASE_URL + url,
     method,
-    headers: { ...headers },
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
     data: options.data,
   });
 };
