@@ -10,7 +10,8 @@ pydantic = {extras = ["email"], version = "*"}
 django-rest-knox = "*"
 
 [dev-packages]
-pipenv = "*"
+ipython = "*"
+black = "*"
 
 [requires]
 python_version = "3.11"
