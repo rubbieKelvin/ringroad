@@ -18,4 +18,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
     path("postman-v2-collection/", collection.view),
+    path("auth/", include("shared.apps.authentication.urls"))
 ]

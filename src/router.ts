@@ -9,13 +9,8 @@ export const router = createRouter({
       component: () => import("@/views/index.vue"),
     },
     {
-      path: "/accounts/signup",
-      name: "signup",
-      component: () => import("@/views/authenticate.vue"),
-    },
-    {
-      path: "/accounts/signin",
-      name: "signin",
+      path: "/auth/callback",
+      name: "auth-callback",
       component: () => import("@/views/authenticate.vue"),
     },
     {

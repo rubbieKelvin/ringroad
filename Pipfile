@@ -9,6 +9,7 @@ djangorestframework = "*"
 django-rest-knox = "*"
 pydantic = {extras = ["email"], version = "*"}
 furl = "*"
+django-environ = "*"
 
 [dev-packages]
 ipython = "*"
