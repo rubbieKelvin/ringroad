@@ -72,7 +72,7 @@ def delete_store(request: Request, id: str) -> Response:
         raise exceptions.ResourceNotFound("Store does not exist")
 
 
-@store_api.endpoint("get", method="POST",permission=IsAuthenticated)
+@store_api.endpoint("get", method="GET",permission=IsAuthenticated)
 def get_stores(request: Request) -> Response:
     user: User = typing.cast(request.user, User)
     stores = Store.objects.filter(owner=user)
