@@ -14,7 +14,8 @@ from shared.view_tools.exceptions import ApiException, ResourceNotFound
 
 from api.models.item import Item
 from api.models.store import Store
-import views.store 
+
+from utils.typecheck import validateUUID
 
 
 item_api = Api("item/", name="Items")
@@ -102,9 +103,7 @@ class ItemGetUpdateDelete:
         if data.quantity:
             item.quantity = data.quantity
         item.save()
-        return Response(
-            item.serialize()
-        )
+        return Response(item.serialize())
 
     def delete(self, request: Request, item_id: str) -> Response:
         item_id = self.check_item_id(item_id=item_id)
@@ -112,22 +111,19 @@ class ItemGetUpdateDelete:
             item: Item = Item.objects.get(id=item_id)
             item.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
         except Item.DoesNotExist:
             raise ResourceNotFound("Item does not exist")
-        
 
-@item_api.endpoint("getList/<store_id>", method="GET", permission=IsAuthenticated)        
+
+@item_api.endpoint("getList/<store_id>", method="GET", permission=IsAuthenticated)
 def getItems(request: Request, store_id: str) -> Response:
-     views.store.checkUUID(id=store_id, value="Store")
-     try:
+    validateUUID(store_id, "Invalid Store id")
+
+    try:
         store = Store.objects.get(id=store_id)
         items = Item.objects.filter(store=store)
-     except Store.DoesNotExist:
-         raise ApiException("Invalid Store Id")
-    
+    except Store.DoesNotExist:
+        raise ApiException("Invalid Store Id")
 
-     return Response([
-         item.serialize() for item in items
-     ])
-
+    return Response([item.serialize() for item in items])
