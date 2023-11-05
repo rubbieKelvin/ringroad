@@ -10,6 +10,8 @@ django-rest-knox = "*"
 pydantic = {extras = ["email"], version = "*"}
 furl = "*"
 django-environ = "*"
+nanoid = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 ipython = "*"
