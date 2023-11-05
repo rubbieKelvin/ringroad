@@ -27,7 +27,7 @@ class CreateStoreInput(pydantic.BaseModel):
 @body_tools.validate(CreateStoreInput)
 def create_store(request: Request) -> Response:
     data: CreateStoreInput = body_tools.get_validated_body(request)
-    user: User = typing.cast(request.user, User)
+    user: User = typing.cast(User, request.user)
 
     store = Store.objects.create(
         name=data.name,
@@ -35,7 +35,7 @@ def create_store(request: Request) -> Response:
         owner=user,
     )
 
-    return Response(status=status.HTTP_201_CREATED)
+    return Response(store.serialize(), status=status.HTTP_201_CREATED)
 
 
 class UpdateStoreInput(pydantic.BaseModel):
