@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from core.env import env
+from datetime import timedelta
 from shared.apps.authentication.settings import AuthConf
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,27 +123,29 @@ STATICFILES_DIRS = [
 
 STATIC_URL = "/static/"
 
-    
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "api.User"
-REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION": ("knox.auth.TokenAuthentication",)}
+REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ("knox.auth.TokenAuthentication",)}
 
 SHARED = {
     "AUTHENTICATION_CONFIG": AuthConf(
-        application_name=env('VITE_PRODUCT_NAME'),
+        application_name=env("VITE_PRODUCT_NAME"),
         application_url=env("DJ_SHARED_FRONTEND_URL"),
         callback_url=env("DJ_SHARED_FRONTEND_AUTH_CALLBACK"),
         application_icon_url=env("DJ_SHARED_FRONTEND_ICON_URL"),
         customisation=AuthConf.Customisation(
-            background_color='#fff',
-            button_text_color='#fff',
-            accent='#000',
+            background_color="#fff",
+            button_text_color="#fff",
+            accent="#000",
             accent_hover="#3e3e3e",
             accent_active="#000",
-            wrapper_elevation='none'
-        )
+            wrapper_elevation="none",
+        ),
     )
 }
+
+REST_KNOX = {"AUTH_HEADER_PREFIX": "Bearer", "TOKEN_TTL": timedelta(weeks=1)}
