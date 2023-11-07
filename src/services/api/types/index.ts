@@ -33,7 +33,7 @@ export interface EndpointInterface {
     null
   >;
 
-  "[PA] /api/store/<id>": Operation<
+  "[PA] /api/store/update/<id>": Operation<
     {
       name?: string;
       description?: string;
@@ -42,6 +42,8 @@ export interface EndpointInterface {
     { id: string },
     null
   >;
+
+  "[DE] /api/store/delete/<id>": Operation<null, null, { id: string }, null>;
 
   // update item
   // list items
