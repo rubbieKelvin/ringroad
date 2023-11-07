@@ -28,7 +28,7 @@ export const router = createRouter({
       component: () => import("@/views/dashboard/layout.vue"),
       children: [
         {
-          path: "/",
+          path: "",
           name: "dashboard-home",
           component: () => import("@/views/dashboard/index.vue"),
         },

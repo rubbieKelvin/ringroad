@@ -1,4 +1,4 @@
-import { User } from "./models";
+import { Store, User } from "./models";
 type I = Record<string, string> | null;
 
 interface Operation<
@@ -24,8 +24,25 @@ export interface EndpointInterface {
 
   // get the current user
   "[GE] /api/user/me": Operation<null, User, null, null>;
-  
-  // create items
+
+  // create store
+  "[PO] /api/store/create": Operation<
+    { name: string; description: string },
+    Store,
+    null,
+    null
+  >;
+
+  "[PA] /api/store/<id>": Operation<
+    {
+      name?: string;
+      description?: string;
+    },
+    Store,
+    { id: string },
+    null
+  >;
+
   // update item
   // list items
   // delete one item
@@ -35,3 +52,24 @@ export interface EndpointInterface {
   // delete store
   // update store
 }
+
+// create store
+// PO api/stores
+
+// get user's stores
+// GET api/stores
+
+// get a store
+// GE api/store/<store_id>
+
+// update a store
+// PA api/store/<store_id>
+
+// delete a store
+// DE api/store/<store_id>
+
+// get store items
+// GE api/store/<store_id>/items
+
+// create store items
+// PO api/store/<store_id>/items

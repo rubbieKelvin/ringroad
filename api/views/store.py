@@ -43,7 +43,7 @@ class UpdateStoreInput(pydantic.BaseModel):
     store_description: str | None
 
 
-@store_api.endpoint("update<id>", method="PATCH", permission=IsAuthenticated)
+@store_api.endpoint("update/<id>", method="PATCH", permission=IsAuthenticated)
 @body_tools.validate(UpdateStoreInput)
 def update_store(request: Request, id: str) -> Response:
     data: UpdateStoreInput = body_tools.get_validated_body(request)
@@ -68,7 +68,7 @@ def update_store(request: Request, id: str) -> Response:
         raise exceptions.ResourceNotFound("Store does not exist")
 
 
-@store_api.endpoint("delete<id>", method="DELETE", permission=IsAuthenticated)
+@store_api.endpoint("delete/<id>", method="DELETE", permission=IsAuthenticated)
 def delete_store(request: Request, id: str) -> Response:
     validateUUID(id, "Invalid store id")
 
