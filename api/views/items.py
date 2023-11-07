@@ -30,19 +30,25 @@ class CreateItemInput(pydantic.BaseModel):
     quantity: int
 
 
-@item_api.endpoint("create", method="POST", permission=IsAuthenticated)
+@item_api.endpoint("create/<id>", method="POST", permission=IsAuthenticated)
 @body_tools.validate(CreateItemInput)
-def create_item(request: Request) -> Response:
+def create_item(request: Request, id: str) -> Response:
     data: CreateItemInput = body_tools.get_validated_body(request)
-    Item.objects.create(
-        name=data.name,
-        brand=data.brand,
-        category=data.category,
-        purchase_price=data.purchase_price,
-        selling_price=data.selling_price,
-        quantity=data.quantity,
-    )
-    return Response(status=status.HTTP_201_CREATED)
+    validateUUID(id,"Invalid store id")
+    try:
+        store = Store.objects.get(id=id)
+        item=  Item.objects.create(
+            name=data.name,
+            brand=data.brand,
+            category=data.category,
+            purchase_price=data.purchase_price,
+            selling_price=data.selling_price,
+            quantity=data.quantity,
+            store=store
+        )
+    except Store.DoesNotExist:
+        raise ResourceNotFound("Store does not exist")
+    return Response(item.serialize(), status=status.HTTP_201_CREATED)
 
 
 @item_api.endpoint_class("<item_id>", permission=IsAuthenticated)
@@ -60,49 +66,51 @@ class ItemGetUpdateDelete:
         return Response(item.serialize())
 
     class UpdateItemInput(pydantic.BaseModel):
-        name: str | None
-        brand: str | None
-        category: str | None
-        purchase_price: Decimal | None
-        selling_price: Decimal | None
-        quantity: int | None
+        name: str | None = None
+        brand: str | None = None
+        category: str | None = None
+        purchase_price: Decimal | None = None
+        selling_price: Decimal | None = None
+        quantity: int | None = None
 
     @body_tools.validate(UpdateItemInput)
-    def update(self, request: Request, item_id: str) -> Response:
+    def patch(self, request: Request, item_id: str) -> Response:
         data: ItemGetUpdateDelete.UpdateItemInput = body_tools.get_validated_body(
             request=request
         )
+        try:
+            item = Item.objects.get(id=item_id)
 
-        item = Item.objects.get(id=item_id)
-
-        if not all(
-            [
-                getattr(data, i)
-                for i in [
-                    "name",
-                    "brand",
-                    "category",
-                    "purchase_price",
-                    "selling_price",
-                    "quantity",
+            if not any(
+                [
+                    getattr(data, i)
+                    for i in [
+                        "name",
+                        "brand",
+                        "category",
+                        "purchase_price",
+                        "selling_price",
+                        "quantity",
+                    ]
                 ]
-            ]
-        ):
-            raise ApiException("Provide at least one parameter to be update")
+            ):
+                raise ApiException("Provide at least one parameter to be update")
 
-        if data.name:
-            item.name = data.name
-        if data.brand:
-            item.brand = data.brand
-        if data.category:
-            item.category = data.category
-        if data.purchase_price:
-            item.purchase_price = data.purchase_price
-        if data.selling_price:
-            item.selling_price = data.selling_price
-        if data.quantity:
-            item.quantity = data.quantity
-        item.save()
+            if data.name:
+                item.name = data.name
+            if data.brand:
+                item.brand = data.brand
+            if data.category:
+                item.category = data.category
+            if data.purchase_price:
+                item.purchase_price = data.purchase_price
+            if data.selling_price:
+                item.selling_price = data.selling_price
+            if data.quantity:
+                item.quantity = data.quantity
+            item.save()
+        except Item.DoesNotExist:
+            raise ResourceNotFound("Item does not exist")
         return Response(item.serialize())
 
     def delete(self, request: Request, item_id: str) -> Response:
