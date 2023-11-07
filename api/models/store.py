@@ -12,3 +12,5 @@ class Store(AbstractModel):
     def serializers(self) -> SerializationStructure:
         return struct('id', 'date_created', 'name', 'description',owner=struct('id'),)
     
+    def __str__(self):
+        return self.name
