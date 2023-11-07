@@ -39,15 +39,15 @@ def create_store(request: Request) -> Response:
 
 
 class UpdateStoreInput(pydantic.BaseModel):
-    store_name: str | None
-    store_description: str | None
+    name: str | None = None
+    description: str | None = None
 
 
 @store_api.endpoint("update/<id>", method="PATCH", permission=IsAuthenticated)
 @body_tools.validate(UpdateStoreInput)
 def update_store(request: Request, id: str) -> Response:
     data: UpdateStoreInput = body_tools.get_validated_body(request)
-    if not data.store_name and not data.store_description:
+    if data.name==None and  data.description==None:
         raise exceptions.ApiException("Pass in atlest one")
 
     validateUUID(id, "Invalid store id")
@@ -55,13 +55,11 @@ def update_store(request: Request, id: str) -> Response:
     try:
         store: Store = Store.objects.get(id=id)
 
-        if data.store_name:
-            store.name = data.store_name
-            store.save()
-
-        if data.store_description:
-            store.description = data.store_description
-            store.save()
+        if data.name:
+            store.name = data.name
+        if data.description:
+            store.description = data.description
+        store.save()
         return Response(store.serialize())
 
     except Store.DoesNotExist:
@@ -83,6 +81,9 @@ def delete_store(request: Request, id: str) -> Response:
 
 @store_api.endpoint("get", method="GET", permission=IsAuthenticated)
 def get_stores(request: Request) -> Response:
-    user: User = typing.cast(request.user, User)
+    user: User = typing.cast(User, request.user)
     stores = Store.objects.filter(owner=user)
     return Response([store.serialize() for store in stores])
+
+#"4207364a-1525-4f02-8d07-4ec3c94fcdab"
+# "04a25d81-dd53-4466-b229-5df76f243577"
