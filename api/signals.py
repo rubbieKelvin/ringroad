@@ -12,8 +12,11 @@ def create_store_on_user_create(
         if instance.is_superuser:
             return
 
-        Store.objects.create(
+        store = Store.objects.create(
             name=f"{instance.full_name}'s store",
             description="My first store",
             owner=instance,
         )
+
+        instance.last_accessed_store = store # type: ignore
+        instance.save()
