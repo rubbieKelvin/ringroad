@@ -22,32 +22,35 @@ const use_template = (text: string, template: Record<string, string>) => {
 
 export const useApi = async <T extends keyof EndpointInterface>(
   endpoint: T,
-  options: {
-    data: EndpointInterface[T]["data"];
-    path_args: EndpointInterface[T]["path_args"];
-    authenticated?: boolean;
-  }
+  options: Pick<EndpointInterface[T], 'data'|"args"|"params">,
+  authenticated: boolean = false
 ) => {
   const [short_method, template_url] = endpoint.split(" ");
 
   const method = method_map[short_method];
-  const url = options?.path_args
-    ? use_template(template_url, options.path_args)
-    : template_url;
+  const url = new URL(
+    BACKEND_BASE_URL +
+      (options?.args ? use_template(template_url, options.args) : template_url)
+  );
 
-  let token: string | null = null;
+  if (options.params)
+    Object.entries(options.params).forEach(([key, value]) => {
+      url.searchParams.set(key, String(value));
+    });
 
-  if (options.authenticated) {
-    token = localStorage.getItem("authtoken");
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (authenticated) {
+    const token = localStorage.getItem("authtoken");
+    headers.Authorization = `Bearer ${token}`;
   }
 
   return await axios.request<EndpointInterface[T]["response"]>({
-    url: BACKEND_BASE_URL + url,
+    url: url.toString(),
     method,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    headers,
     data: options.data,
   });
 };

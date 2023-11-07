@@ -1,7 +1,10 @@
 <template>
   <div class="flex flex-col items-center justify-center">
-    <div class="border border-gray-300 p-4 rounded-md flex flex-col gap-3">
-      <p>Create store</p>
+    <div class="p-4 rounded-md flex flex-col gap-3 min-w-[30em]">
+      <div class="flex gap-2 items-center">
+        <IconBuildingStore :size="32" />
+        <h1 class="text-2xl flex-grow">Create store</h1>
+      </div>
       <div class="input-field" v-for="i in ['name', 'description']" :key="i">
         <label :for="i">{{ i }}</label>
         <input :name="i" type="text" :placeholder="i" />
@@ -22,6 +25,7 @@
 </style>
 
 <script lang="ts" setup>
+import { IconBuildingStore } from "@tabler/icons-vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();

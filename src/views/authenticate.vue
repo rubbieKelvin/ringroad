@@ -31,18 +31,39 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { BACKEND_SIGNUP_AUTH } from "@/constants";
 import { onMounted } from "vue";
+import { useApi } from "@/services/api";
 
 const route = useRoute();
-const { code, user } = route.query;
+const router = useRouter();
+const code = route.query.code as string;
 
-onMounted(() => {
-  if (!(code && user)) {
+onMounted(async () => {
+  if (!code) {
     const url = new URL(BACKEND_SIGNUP_AUTH);
-    url.searchParams.set("flash", "Error, could'nt derive user, Try signing in");
-    window.open(url, '_self');
+    url.searchParams.set(
+      "flash",
+      "Error, could'nt derive user, Try signing in"
+    );
+    return window.open(url, "_self");
   }
+
+  const { data, status } = await useApi("[PO] /auth/exchange", {
+    data: {
+      code,
+    },
+    args: null,
+    params: null,
+  });
+
+  if (status === 200) {
+    localStorage.setItem("authtoken", data.token);
+  }
+
+  router.replace({
+    name: "select-store",
+  });
 });
 </script>

@@ -1,4 +1,5 @@
 from django.db import models
+from shared.abstractmodel import serialization
 from shared.apps.authentication.models import ExtensibleUser
 
 
@@ -10,7 +11,7 @@ class User(ExtensibleUser):
     the AbstractBaseUser and PermissionsMixin classes and includes additional
     fields for user information.
     """
-    
+
     first_name = models.CharField(max_length=30, null=True, default=None)
     last_name = models.CharField(max_length=30, null=True, default=None)
 
@@ -36,4 +37,16 @@ class User(ExtensibleUser):
 
         return User.objects.create_user(
             email, password, first_name=first_name, last_name=last_name
+        )
+
+    @property
+    def full_name(self):
+        if any([self.first_name, self.last_name]):
+            return f"{self.first_name or ''} {self.last_name or ''}".strip()
+        return self.email
+
+    @property
+    def serializers(self) -> serialization.SerializationStructure:
+        return serialization.struct(
+            "id", "email", "full_name", "first_name", "last_name", "date_created"
         )
