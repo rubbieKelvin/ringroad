@@ -22,11 +22,7 @@ const use_template = (text: string, template: Record<string, string>) => {
 
 export const useApi = async <T extends keyof EndpointInterface>(
   endpoint: T,
-  options: {
-    data: EndpointInterface[T]["data"];
-    args: EndpointInterface[T]["args"];
-    params: EndpointInterface[T]["params"];
-  },
+  options: Pick<EndpointInterface[T], 'data'|"args"|"params">,
   authenticated: boolean = false
 ) => {
   const [short_method, template_url] = endpoint.split(" ");

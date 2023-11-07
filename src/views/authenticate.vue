@@ -31,12 +31,13 @@
 </template>
 
 <script lang="ts" setup>
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { BACKEND_SIGNUP_AUTH } from "@/constants";
 import { onMounted } from "vue";
 import { useApi } from "@/services/api";
 
 const route = useRoute();
+const router = useRouter();
 const code = route.query.code as string;
 
 onMounted(async () => {
@@ -53,12 +54,16 @@ onMounted(async () => {
     data: {
       code,
     },
-    args: undefined,
-    params: undefined,
+    args: null,
+    params: null,
   });
 
   if (status === 200) {
     localStorage.setItem("authtoken", data.token);
   }
+
+  router.replace({
+    name: "select-store",
+  });
 });
 </script>
