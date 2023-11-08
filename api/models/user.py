@@ -57,8 +57,5 @@ class User(ExtensibleUser):
             "first_name",
             "last_name",
             "date_created",
-            # last_accessed_store='SERIALIZE_AS_PK',
-            # last_accessed_store='SERIALIZE_AS_STRING',
-            # last_accessed_store=serialization.struct("id"),
-            last_accessed_store=serialization.struct("id", 'owner'),
+            last_accessed_store="SERIALIZE_AS_PK",
         )
