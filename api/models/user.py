@@ -14,7 +14,9 @@ class User(ExtensibleUser):
 
     first_name = models.CharField(max_length=30, null=True, default=None)
     last_name = models.CharField(max_length=30, null=True, default=None)
-    last_accessed_store = models.ForeignKey("api.Store",on_delete=models.CASCADE, default=None,null=True)
+    last_accessed_store = models.ForeignKey(
+        "api.Store", on_delete=models.CASCADE, default=None, null=True
+    )
 
     @staticmethod
     def create(
@@ -22,7 +24,6 @@ class User(ExtensibleUser):
         password: str,
         first_name: str | None = None,
         last_name: str | None = None,
-        
     ):
         """
         Create and save a user with the given email and password.
@@ -50,5 +51,11 @@ class User(ExtensibleUser):
     @property
     def serializers(self) -> serialization.SerializationStructure:
         return serialization.struct(
-            "id", "email", "full_name", "first_name", "last_name", "date_created", "last_accessed_store"
+            "id",
+            "email",
+            "full_name",
+            "first_name",
+            "last_name",
+            "date_created",
+            last_accessed_store="SERIALIZE_AS_PK",
         )
