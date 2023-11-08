@@ -7,11 +7,11 @@ name = "pypi"
 django = "*"
 djangorestframework = "*"
 django-rest-knox = "*"
-pydantic = {extras = ["email"], version = "*"}
 furl = "*"
 django-environ = "*"
 nanoid = "*"
 django-cors-headers = "*"
+pydantic = {extras = ["email"], version = "*"}
 
 [dev-packages]
 ipython = "*"
