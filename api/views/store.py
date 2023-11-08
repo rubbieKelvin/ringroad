@@ -73,7 +73,8 @@ class GetUpdateDeleteStoresView:
         validateUUID(store_id, "Invalid store id")
 
         store: Store = Store.objects.get_or_raise_exception(
-            models.Q(id=store_id), exceptions.ResourceNotFound("Store does not exist")
+            models.Q(id=store_id, owner=request.user),
+            exceptions.ResourceNotFound("Store does not exist"),
         )
 
         if data.name:
@@ -86,13 +87,13 @@ class GetUpdateDeleteStoresView:
 
         return Response(store.serialize())
 
+    def delete(self, request: Request, store_id: str) -> Response:
+        validateUUID(store_id, "Invalid store id")
 
-def delete_store(self, request: Request, store_id: str) -> Response:
-    validateUUID(store_id, "Invalid store id")
+        store: Store = Store.objects.get_or_raise_exception(
+            models.Q(id=store_id, owner=request.user),
+            exceptions.ResourceNotFound("Store does not exist"),
+        )
 
-    store: Store = Store.objects.get_or_raise_exception(
-        models.Q(id=store_id), exceptions.ResourceNotFound("Store does not exist")
-    )
-
-    store.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+        store.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
