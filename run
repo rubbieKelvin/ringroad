@@ -1,0 +1,17 @@
+#!/bin/bash
+
+if [ "$#" -ne 1 ]; then
+  echo "Usage: $0 (fe | be)"
+  exit 1
+fi
+
+if [ "$1" = "fe" ]; then
+  echo "Running front-end: bun run dev"
+  bun run dev
+elif [ "$1" = "be" ]; then
+  echo "Running back-end: pipenv run python manage.py runserver"
+  pipenv run python manage.py runserver
+else
+  echo "Usage: $0 (fe | be)"
+  exit 1
+fi
