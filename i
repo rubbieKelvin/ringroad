@@ -14,6 +14,7 @@ commands["fe"]="bun run dev"
 commands["be"]="pipenv run python manage.py runserver 7000"
 commands["mk-migrations"]="pipenv run python manage.py makemigrations"
 commands["migrate"]="pipenv run python manage.py migrate"
+commands["mac:install-bun"]="bash ./scripts/bun-install-mac.sh"
 
 # Print a helpful usage message
 print_usage() {
