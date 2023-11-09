@@ -18,6 +18,7 @@ export interface Item {
 }
 
 export interface Store {
+  id: string;
   owner: User;
   name: string;
   description: string;
