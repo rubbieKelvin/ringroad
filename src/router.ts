@@ -19,11 +19,6 @@ export const router = createRouter({
       component: () => import("@/views/create-store.vue"),
     },
     {
-      path: "/store/select",
-      name: "select-store",
-      component: () => import("@/views/select-store.vue"),
-    },
-    {
       path: "/store/:id",
       component: () => import("@/views/dashboard/layout.vue"),
       children: [

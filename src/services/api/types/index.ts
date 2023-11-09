@@ -25,6 +25,8 @@ export interface EndpointInterface {
   // get the current user
   "[GE] /api/user/me": Operation<null, User, null, null>;
 
+  "[GE] /api/user/last-viewed-store": Operation<null, Store | null, null, null>;
+
   // create store
   "[PO] /api/store/create": Operation<
     { name: string; description: string },

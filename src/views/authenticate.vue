@@ -50,20 +50,45 @@ onMounted(async () => {
     return window.open(url, "_self");
   }
 
-  const { data, status } = await useApi("[PO] /auth/exchange", {
+  // const { data: user } = await
+
+  useApi("[PO] /auth/exchange", {
     data: {
       code,
     },
     args: null,
     params: null,
-  });
+  })
+    .then(async ({ data: authtoken }) => {
+      localStorage.setItem("authtoken", authtoken.token);
 
-  if (status === 200) {
-    localStorage.setItem("authtoken", data.token);
-  }
+      const { data: store } = await useApi(
+        "[GE] /api/user/last-viewed-store",
+        {
+          data: null,
+          args: null,
+          params: null,
+        },
+        true
+      );
 
-  router.replace({
-    name: "select-store",
-  });
+      if (store) {
+        return router.replace({
+          name: "dashboard-home",
+          params: {
+            id: store.id,
+          },
+        });
+      }
+
+      return router.replace({
+        name: "create-store",
+      });
+    })
+    .catch(() => {
+      const url = new URL(BACKEND_SIGNUP_AUTH);
+      url.searchParams.set("flash", "Error deriving token");
+      return window.open(url, "_self");
+    });
 });
 </script>
