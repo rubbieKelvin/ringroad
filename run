@@ -1,17 +1,30 @@
 #!/bin/bash
 
+# Define the map of arguments to commands
+declare -A commands
+
+commands["fe"]="bun run dev"
+commands["be"]="pipenv run python manage.py runserver"
+
+# Check if an argument is provided
 if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 (fe | be)"
+
+  echo "Usage: $0 <command>"
+  echo "Available commands: ${!commands[@]}"
   exit 1
+
 fi
 
-if [ "$1" = "fe" ]; then
-  echo "Running front-end: bun run dev"
-  bun run dev
-elif [ "$1" = "be" ]; then
-  echo "Running back-end: pipenv run python manage.py runserver"
-  pipenv run python manage.py runserver
+# Check if the provided argument is in the map
+if [ "${commands[$1]+exists}" ]; then
+
+  command_to_run="${commands[$1]}"
+  echo "Running $1: $command_to_run"
+  eval "$command_to_run"
+
 else
-  echo "Usage: $0 (fe | be)"
+
+  echo "Invalid command. Available commands: ${!commands[@]}"
   exit 1
+
 fi
