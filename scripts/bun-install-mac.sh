@@ -1,2 +1,1 @@
-brew tap oven-sh/bun 
-brew install bun
+npm install -g bun
