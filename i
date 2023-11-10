@@ -12,7 +12,7 @@ declare -a commands
 
 commands=(
   "fe:bun run dev"
-  "be:python3.11 -m pipenv run python manage.py runserver 7000"
+  "be:pipenv run python manage.py runserver 7000"
   "mk-migrations:pipenv run python manage.py makemigrations"
   "migrate:pipenv run python manage.py migrate"
   "mac-install-bun:bash ./scripts/bun-install-mac.sh"
