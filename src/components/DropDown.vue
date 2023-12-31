@@ -17,11 +17,14 @@
       </div>
     </div>
 
-    <div v-if="open" class="absolute w-full">
+    <div
+      v-if="open"
+      class="absolute w-full z-10 border shadow-lg border-slate-100"
+    >
       <ul>
-        <li v-for="item in values">
+        <li v-for="item in values" @click="() => select(item)">
           <slot :value="item">
-            <div class="px-5 py-2">
+            <div class="px-5 py-2.5 bg-white hover:bg-gray-100">
               {{ item }}
             </div>
           </slot>
@@ -35,20 +38,17 @@
 import { v4 as uuid4 } from "uuid";
 import { IconChevronUp } from "@tabler/icons-vue";
 import { IconChevronDown } from "@tabler/icons-vue";
-import {
-  FunctionalComponent,
-  Ref,
-  WritableComputedRef,
-  computed,
-  ref,
-} from "vue";
+import { FunctionalComponent, WritableComputedRef, computed } from "vue";
 import { usePopupStore } from "@/store/popup";
 
-defineProps<{
+const props = defineProps<{
   icon?: FunctionalComponent;
   title: string;
+  modelValue: string | number | null;
   values: Array<number | string>;
 }>();
+
+const emit = defineEmits(["selected", "update:modelValue"]);
 
 const id = uuid4();
 const popupstore = usePopupStore();
@@ -62,5 +62,19 @@ const open: WritableComputedRef<boolean> = computed({
     return popupstore.currentlyOpened === id;
   },
 });
-const selection: Ref<string | number | null> = ref(null);
+
+const selection: WritableComputedRef<string | number | null> = computed({
+  get() {
+    return props.modelValue;
+  },
+  set(v) {
+    emit("update:modelValue", v);
+  },
+});
+
+function select(item: number | string | null) {
+  selection.value = item;
+  open.value = false;
+  emit("selected", item);
+}
 </script>

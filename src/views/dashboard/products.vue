@@ -35,30 +35,21 @@
       <!-- category select -->
       <DropDown
         class="w-60"
+        v-model="category"
         :icon="IconCategory"
         title="Category"
         :values="['bag', 'cat', 'box']"
       />
     </div>
-
-    <DropDown
-      class="w-60"
-      :icon="IconCategory"
-      title="Category"
-      :values="['bag', 'cat', 'box']"
-    />
-    <DropDown
-      class="w-60"
-      :icon="IconCategory"
-      title="Category"
-      :values="['bag', 'cat', 'box']"
-    />
   </div>
 </template>
 
 <script lang="ts" setup>
 import DropDown from "@/components/DropDown.vue";
 import { IconSearch, IconCategory } from "@tabler/icons-vue";
+import { ref } from "vue";
+
+const category = ref(null);
 </script>
 
 <style scoped lang="scss">
