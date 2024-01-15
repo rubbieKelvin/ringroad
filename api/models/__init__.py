@@ -1,4 +1,7 @@
 from .user import User
 from .store import Store
-from .item import Item
+from .product import Product
+from .properties import PropertyTemplate
+from .properties import ProductProperties
 
+models = [User, Store, Product, PropertyTemplate, ProductProperties]
