@@ -1,3 +1,11 @@
 <template>
-  <RouterView class="h-full text-base text-gray-800" />
+  <v-app>
+    <v-main>
+      <router-view />
+    </v-main>
+  </v-app>
 </template>
+
+<script lang="ts" setup>
+  //
+</script>
